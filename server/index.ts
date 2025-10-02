@@ -37,19 +37,23 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 //routes
-app.get("/check", (req: Request, res: Response) => {
+app.get("/api/check", (req: Request, res: Response) => {
   res.send("Server is running");
 });
 
 const _dirname = path.resolve();
 app.use(express.static(path.join(_dirname, "frontEnd", "dist")));
-app.use("*", (req, res) => {
+app.use((req, res, next) => {
+  if (req.path.startsWith("/api")) {
+    // Pass to API 404 if it's an API route
+    return next();
+  }
   res.sendFile(path.join(_dirname, "frontEnd", "dist", "index.html"));
 });
 
 // Catch-all route for undefined routes
-app.use((req: Request, res: Response, next: NextFunction) => {
-  res.status(404).json({ message: "Route not found" });
+app.use("/api", (req: Request, res: Response) => {
+  res.status(404).sendFile(path.join(_dirname, "frontEnd", "dist", "404.html"));
 });
 
 // Error-handling middleware
