@@ -7,6 +7,7 @@ import helmet from "helmet";
 import cookieParser from "cookie-parser";
 import path from "path";
 import connectDB from "./config/dbConncection";
+import employeeRouter from "./routes/employee.route";
 
 config({ path: path.resolve(__dirname, "../.env") });
 const apiLimiter = rateLimit({
@@ -41,9 +42,7 @@ app.use(express.urlencoded({ extended: true }));
 connectDB();
 
 //routes
-app.get("/api/check", (req: Request, res: Response) => {
-  res.send("Server is running");
-});
+app.use("/api/v1/employee", employeeRouter);
 
 const _dirname = path.resolve();
 app.use(express.static(path.join(_dirname, "frontEnd", "dist")));
