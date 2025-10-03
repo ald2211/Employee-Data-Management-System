@@ -9,8 +9,8 @@ import Dummy from "../components/Dummy";
 const Routers = createBrowserRouter(
   createRoutesFromElements(
     <>
-      <Route path="*" element={<NotFoundPage />} />
       <Route path="/" element={<Dummy />} />
+      <Route path="*" element={<NotFoundPage />} />
     </>
   )
 );

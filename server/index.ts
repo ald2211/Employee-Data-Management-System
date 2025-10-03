@@ -6,6 +6,7 @@ import cors from "cors";
 import helmet from "helmet";
 import cookieParser from "cookie-parser";
 import path from "path";
+import connectDB from "./config/dbConncection";
 
 config({ path: path.resolve(__dirname, "../.env") });
 const apiLimiter = rateLimit({
@@ -35,6 +36,9 @@ app.use(cors({ credentials: true, origin: process.env.FRONTEND_URL }));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+//database connection
+connectDB();
 
 //routes
 app.get("/api/check", (req: Request, res: Response) => {
