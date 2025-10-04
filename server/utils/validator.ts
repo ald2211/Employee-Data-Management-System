@@ -39,11 +39,12 @@ export const employeeDataValidationSchema = Joi.object({
 
   phone: Joi.string()
     .trim()
-    .pattern(/^[0-9]{10}$/)
+    .pattern(/^(?:\+?[0-9]{1,3}[- ]?)?[0-9]{10}$/)
     .required()
     .messages({
       "string.empty": "Phone number is required",
-      "string.pattern.base": "Phone number must be exactly 10 digits",
+      "string.pattern.base":
+        "Phone number must be 10 digits, with optional country code",
     }),
 
   position: Joi.string()

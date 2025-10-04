@@ -37,15 +37,27 @@ export const createEmployee = async (
       position,
     });
 
-    res
-      .status(201)
-      .json({
-        success: true,
-        newEmployee,
-        message: "Employee created successfully",
-      });
+    res.status(201).json({
+      success: true,
+      newEmployee,
+      message: "Employee created successfully",
+    });
   } catch (error: any) {
     console.log("error at creating employee:", error);
+    if (error.code === 11000) {
+      const duplicateField = Object.keys(error.keyPattern || {})[0]; // Get the duplicate field name
+
+      if (duplicateField === "email") {
+        next(errorHandler(400, "Email already exists."));
+        return;
+      } else if (duplicateField === "phone") {
+        next(errorHandler(400, "Phone number already exists."));
+        return;
+      } else if (duplicateField === "employeeId") {
+        next(errorHandler(400, "Employee id already exists."));
+        return;
+      }
+    }
     next(errorHandler(500, "server error"));
   }
 };
@@ -58,28 +70,29 @@ export const getEmployee = async (
 ) => {
   try {
     const page = parseInt(req.query.page as string) || 1;
-    const limit = parseInt(req.query.limit as string) || 5;
+    const limit = parseInt(req.query.limit as string) || 10;
     const skip = (page - 1) * limit;
 
-    const searchTerm = req.query.search;
+    const searchTerm = req.query.search as string;
     let query = {};
 
-    if (searchTerm) {
+    if (searchTerm && searchTerm.trim() !== "") {
       query = {
-        name: { $regex: searchTerm, $options: "i" },
-        email: { $regex: searchTerm, $options: "i" },
-        employeeId: { $regex: searchTerm, $options: "i" },
+        $or: [
+          { name: { $regex: searchTerm, $options: "i" } },
+          { email: { $regex: searchTerm, $options: "i" } },
+          { employeeId: { $regex: searchTerm, $options: "i" } },
+        ],
       };
     }
     const employees = await Employee.find(query)
       .skip(skip)
       .limit(Number(limit))
       .sort({ createdAt: -1 });
-
     const totalCount = await Employee.countDocuments();
     const totalPages = Math.ceil(totalCount / limit);
 
-    res.status(201).json({ employees, totalPages });
+    res.status(200).json({ success: true, employees, totalPages, totalCount });
   } catch (error: any) {
     console.log("error at get employees:", error);
     next(errorHandler(500, "server error"));
@@ -93,32 +106,38 @@ export const updateEmployee = async (
   next: NextFunction
 ) => {
   try {
-    const { values } = req.body;
+    const { employeeId, name, email, position, phone } = req.body;
+    const { id } = req.params;
 
-    const { error } = employeeDataValidationSchema.validate(values);
+    const employee = await Employee.findById(id);
+    if (!employee) {
+      next(errorHandler(400, "Employee not found"));
+      return;
+    }
+    const { error } = employeeDataValidationSchema.validate({
+      employeeId,
+      name,
+      email,
+      position,
+      phone,
+    });
 
     if (error) {
       next(errorHandler(400, error.details[0].message));
       return;
     }
-    const consignee = await Employee.findById(values._id);
-    if (!consignee) {
-      next(errorHandler(400, "Consignee not found"));
-      return;
-    }
+
     const updatedEmployee = await Employee.findByIdAndUpdate(
-      values._id,
-      { name: values.name, address: values.address },
+      id,
+      { employeeId, name, email, position, phone },
       { new: true } // this ensures the returned doc is the updated one
     );
 
-    res
-      .status(200)
-      .json({
-        success: true,
-        updatedEmployee,
-        message: "Employee updated successfully",
-      });
+    res.status(200).json({
+      success: true,
+      updatedEmployee,
+      message: "Employee updated successfully",
+    });
   } catch (error: any) {
     console.log("error at update employee:", error);
     next(errorHandler(500, "server error"));

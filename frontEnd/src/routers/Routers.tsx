@@ -4,7 +4,7 @@ import {
   Route,
 } from "react-router-dom";
 import NotFoundPage from "../pages/NotFoundPage";
-import Dummy from "../components/Dummy";
+import Dummy from "../components/EmployeesList";
 
 const Routers = createBrowserRouter(
   createRoutesFromElements(
