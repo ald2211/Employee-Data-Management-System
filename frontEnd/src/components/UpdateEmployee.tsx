@@ -9,7 +9,7 @@ interface UpdateEmployeeModalProps {
   employee: EmployeeType;
   closeModal: () => void;
   updateEmployees: (
-    callback: (prevUsers: EmployeeType[]) => EmployeeType[]
+    callback: (prevEmployees: EmployeeType[]) => EmployeeType[]
   ) => void;
 }
 
@@ -36,7 +36,9 @@ const UpdateEmployeeModal: React.FC<UpdateEmployeeModalProps> = ({
         if (resp?.success) {
           updateEmployees((prevEmployees) =>
             prevEmployees.map((emp) =>
-              emp._id === resp.updatedEmployee._id ? { ...emp, ...resp.updatedEmployee } : emp
+              emp._id === resp.updatedEmployee._id
+                ? { ...emp, ...resp.updatedEmployee }
+                : emp
             )
           );
           closeModal();
@@ -49,7 +51,7 @@ const UpdateEmployeeModal: React.FC<UpdateEmployeeModalProps> = ({
       }
     },
   });
-  console.log('employee:', employee);
+  console.log("employee:", employee);
   return (
     <div className="fixed inset-0 modal_bg bg-opacity-50 flex justify-center items-center p-4">
       <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-2xl relative">

@@ -9,11 +9,15 @@ import {
 } from "lucide-react";
 import type { EmployeeType } from "../types";
 import CreateEmployeeModal from "./CreateEmployee";
-import { getAllEmployees } from "../apis/api";
+import { deleteEmployee, getAllEmployees } from "../apis/api";
 import { debounce } from "lodash";
 import UpdateEmployeeModal from "./UpdateEmployee";
+import { Success } from "../helpers/popup";
+import { useConfirm } from "../hooks/useConfirm";
 
 const EmployeeManagementSystem = () => {
+  //confirm dialog
+  const { confirm, ConfirmDialog } = useConfirm();
   //employee data state
   const [employees, setEmployees] = useState<EmployeeType[]>([]);
 
@@ -52,7 +56,7 @@ const EmployeeManagementSystem = () => {
       setTotalPages(response.totalPages || 1); // Default to 1 if missing
       setTotalEmployees(response.totalCount || 0);
     } catch (err) {
-      console.log("Failed listing jobs:", err);
+      console.log("Failed listing employees:", err);
       setEmployees([]); // Reset employees on error
       setTotalPages(1);
       setTotalEmployees(0);
@@ -81,11 +85,43 @@ const EmployeeManagementSystem = () => {
     }
   };
 
-  const handleDeleteEmployee = (id: string) => {
-    if (window.confirm("Are you sure you want to delete this employee?")) {
-      alert(`Delete Employee with ID: ${id}`);
+  const handleDeleteEmployee = async (id: string) => {
+    const ok = await confirm("Are you sure you want to delete this Employee?");
+    if (!ok) return;
+    setLoading(true);
+    try {
+      const resp = await deleteEmployee(id);
+      if (resp.success) {
+        Success(resp.message || "Employee deleted successfully.");
+        // Refetch employees for current page
+        // If current page becomes empty after deletion, go to previous page
+        const newTotal = totalEmployees - 1;
+        const lastPage = Math.ceil(newTotal / pageSize);
+        const newPage = currentPage > lastPage ? lastPage : currentPage;
+
+        setCurrentPage(newPage); // this triggers useEffect fetch
+        setTotalEmployees(newTotal);
+      } else {
+        throw new Error(resp.message || "Failed to delete Employee.");
+      }
+    } catch (err) {
+      console.log(err, "error deleting employee");
+    } finally {
+      setLoading(false);
     }
   };
+
+  //refresh employees list
+  const refreshEmployees = async (page = 1) => {
+  setCurrentPage(page);   
+  setLoading(true);
+  try {
+    await fetchEmployees(searchQuery, page);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -219,6 +255,7 @@ const EmployeeManagementSystem = () => {
                 )}
               </tbody>
             </table>
+            {ConfirmDialog}
           </div>
 
           {/* Pagination */}
@@ -270,7 +307,7 @@ const EmployeeManagementSystem = () => {
       {showAddEmployeeModal && (
         <CreateEmployeeModal
           closeModal={() => setShowAddEmployeeModal(false)}
-          updateEmployees={setEmployees}
+          refreshEmployees={refreshEmployees}
         />
       )}
       {selectedEmployee && (

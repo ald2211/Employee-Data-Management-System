@@ -89,7 +89,7 @@ export const getEmployee = async (
       .skip(skip)
       .limit(Number(limit))
       .sort({ createdAt: -1 });
-    const totalCount = await Employee.countDocuments();
+    const totalCount = await Employee.countDocuments(query);
     const totalPages = Math.ceil(totalCount / limit);
 
     res.status(200).json({ success: true, employees, totalPages, totalCount });

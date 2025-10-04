@@ -2,19 +2,16 @@ import { useFormik } from "formik";
 import { Success } from "../helpers/popup";
 import { X } from "lucide-react";
 import { employeeDataValidationSchema } from "../schemas";
-import type { EmployeeType } from "../types";
 import { createNewEmployee } from "../apis/api";
 
 interface CreateEmployeeModalProps {
   closeModal: () => void;
-  updateEmployees: (
-    callback: (prevUsers: EmployeeType[]) => EmployeeType[]
-  ) => void;
+  refreshEmployees: (page: number) => void;
 }
 
 const CreateEmployeeModal: React.FC<CreateEmployeeModalProps> = ({
   closeModal,
-  updateEmployees,
+  refreshEmployees,
 }) => {
   const formik = useFormik({
     initialValues: {
@@ -31,7 +28,7 @@ const CreateEmployeeModal: React.FC<CreateEmployeeModalProps> = ({
 
         const resp = await createNewEmployee(values);
         if (resp.success) {
-          updateEmployees((prev) => [resp?.newEmployee, ...prev]);
+          refreshEmployees(1);
           closeModal();
           Success(resp?.message);
         }
@@ -125,7 +122,6 @@ const CreateEmployeeModal: React.FC<CreateEmployeeModalProps> = ({
                 <p className="text-red-500 text-sm">{formik.errors.position}</p>
               )}
             </div>
-            
           </div>
 
           {/* Buttons */}
