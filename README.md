@@ -34,7 +34,7 @@ A simple full-stack CRUD (Create, Read, Update, Delete) application to manage a 
 ### 1. Employee Management
 
 - **Add Employee**:  
-  Users can add new employee records with details such as **name**, **email**, and **position**.
+  Users can add new employee records with details such as **employeeId**, **name**, **email**, **phone**, and **position**.
 
 - **View Employees**:  
   All employees are displayed in a table or list with **pagination** for easy navigation.
@@ -102,6 +102,7 @@ Create a `.env` file in the root folder with the following content:
 ### 4. Run the application
 
 >root folder
+npm run build
 npm start
 
 ## API Endpoints
@@ -109,13 +110,13 @@ npm start
 ### Employee Management
 - **Fetch Employees**: `GET /api/v1/employee`  
 - **Add Employee**: `POST /api/v1/employee`  
-- **Update Employee**: `PUT /api/v1/employees/:id`  
-- **Delete Employee**: `DELETE /api/v1/employees/:id`  
+- **Update Employee**: `PUT /api/v1/employee/:id`  
+- **Delete Employee**: `DELETE /api/v1/employee/:id`  
 
 ## Usage
 
 1. **Add Employee**:  
-   - Use the form to add a new employee with name, email, phone, and position.
+   - Use the form to add a new employee with employeeId, name, email, phone, and position.
 
 2. **View Employees**:  
    - All employees are displayed in a paginated table.  
