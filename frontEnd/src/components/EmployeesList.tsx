@@ -65,8 +65,6 @@ const EmployeeManagementSystem = () => {
     }
   };
 
-
-
   // Debounced function for searching
   const debouncedFetch = useCallback(
     debounce((query, page) => {
@@ -89,14 +87,14 @@ const EmployeeManagementSystem = () => {
 
   //refresh employees list
   const refreshEmployees = async (page = 1) => {
-  setCurrentPage(page);   
-  setLoading(true);
-  try {
-    await fetchEmployees(searchQuery, page);
-  } finally {
-    setLoading(false);
-  }
-};
+    setCurrentPage(page);
+    setLoading(true);
+    try {
+      await fetchEmployees(searchQuery, page);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleDeleteEmployee = async (id: string) => {
     const ok = await confirm("Are you sure you want to delete this Employee?");
@@ -121,9 +119,6 @@ const EmployeeManagementSystem = () => {
       setLoading(false);
     }
   };
-
-  
-
 
   return (
     <div className="min-h-screen bg-gray-50">

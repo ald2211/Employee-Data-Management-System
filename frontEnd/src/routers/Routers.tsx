@@ -4,12 +4,12 @@ import {
   Route,
 } from "react-router-dom";
 import NotFoundPage from "../pages/NotFoundPage";
-import Dummy from "../components/EmployeesList";
+import EmployeeManagementPage from "../pages/EmployeeManagementPage";
 
 const Routers = createBrowserRouter(
   createRoutesFromElements(
     <>
-      <Route path="/" element={<Dummy />} />
+      <Route path="/" element={<EmployeeManagementPage />} />
       <Route path="*" element={<NotFoundPage />} />
     </>
   )
