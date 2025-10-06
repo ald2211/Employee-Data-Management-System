@@ -16,7 +16,7 @@ A simple full-stack CRUD (Create, Read, Update, Delete) application to manage a 
   - [Search and Filtering](#2-search-and-filtering)
   - [Pagination](#3-pagination)
 - [Technologies Used](#technologies-used)
-- [Design Choices & Assumptions](#Design Choices & Assumptions)
+- [Design Choices & Assumptions](#Design-Choices-&-Assumptions)
 - [Installation](#installation)
   - [Clone the Repository](#1-clone-the-repository)
   - [Install Dependencies](#2-install-dependencies)
