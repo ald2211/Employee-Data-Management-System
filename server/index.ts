@@ -18,7 +18,7 @@ const app = express();
 app.use("/api/", apiLimiter);
 app.use(morgan("dev"));
 app.use(helmet());
-const url = process.env.URL;
+const url = process.env.FRONTEND_URL;
 app.use(
   helmet.contentSecurityPolicy({
     directives: {
