@@ -16,6 +16,7 @@ A simple full-stack CRUD (Create, Read, Update, Delete) application to manage a 
   - [Search and Filtering](#2-search-and-filtering)
   - [Pagination](#3-pagination)
 - [Technologies Used](#technologies-used)
+-  [Design Choices & Assumptions](#Design Choices & Assumptions)
 - [Installation](#installation)
   - [Clone the Repository](#1-clone-the-repository)
   - [Install Dependencies](#2-install-dependencies)
@@ -66,6 +67,17 @@ A simple full-stack CRUD (Create, Read, Update, Delete) application to manage a 
 - **Frontend**: ReactJS with Typescript
 - **Backend**: Node.js with Express.js with Typescript
 - **Database**: MongoDB
+- 
+## Design Choices & Assumptions
+
+-Form Handling & Validation: **Formik** & **Yup**
+-Confirmation Modal: Custom reusable **useConfirm hook**
+-Advanced Search: **Debouncing** to reduce API calls
+-Pagination: For large datasets
+-Backend Validation & Security: **Joi** for request validation & **Helmet** for security headers
+-Frontend-Backend Integration: Frontend build served as static files from the backend
+-Employee Data: employeeId, name, email, phone, position
+-API Design: RESTful APIs
 
 ## Installation
 
