@@ -36,7 +36,7 @@ A simple full-stack CRUD (Create, Read, Update, Delete) application to manage a 
 ### 1. Employee Management
 
 - **Add Employee**:  
-  Users can add new employee records with details such as **employeeId**, **name**, **email**, **phone**, and **position**.
+  Users can add new employee records with details such as **employeeId**, **name**, **email**, **phone**, and **position** using a form built with Formik for form handling and Yup for validation.
 
 - **View Employees**:  
   All employees are displayed in a table or list with **pagination** for easy navigation.
