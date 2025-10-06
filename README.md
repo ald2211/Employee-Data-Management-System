@@ -19,7 +19,7 @@ A simple full-stack CRUD (Create, Read, Update, Delete) application to manage a 
 - [Installation](#installation)
   - [Clone the Repository](#1-clone-the-repository)
   - [Install Dependencies](#2-install-dependencies)
-  - [Run the Application](#3-run-the-application)
+  - [Testing and Run the Application](#3-run-the-application)
 - [API Endpoints](#api-endpoints)
   - [Employee Management](#employee-management)
 - [Usage](#usage)
@@ -101,9 +101,10 @@ Create a `.env` file in the root folder with the following content:
 
 
 
-### 4. Run the application
+### 4. Test and Run the application
 
 >root folder
+npm test
 npm run build
 npm start
 
