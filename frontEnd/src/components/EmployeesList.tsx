@@ -65,6 +65,8 @@ const EmployeeManagementSystem = () => {
     }
   };
 
+
+
   // Debounced function for searching
   const debouncedFetch = useCallback(
     debounce((query, page) => {
@@ -85,6 +87,17 @@ const EmployeeManagementSystem = () => {
     }
   };
 
+  //refresh employees list
+  const refreshEmployees = async (page = 1) => {
+  setCurrentPage(page);   
+  setLoading(true);
+  try {
+    await fetchEmployees(searchQuery, page);
+  } finally {
+    setLoading(false);
+  }
+};
+
   const handleDeleteEmployee = async (id: string) => {
     const ok = await confirm("Are you sure you want to delete this Employee?");
     if (!ok) return;
@@ -98,9 +111,7 @@ const EmployeeManagementSystem = () => {
         const newTotal = totalEmployees - 1;
         const lastPage = Math.ceil(newTotal / pageSize);
         const newPage = currentPage > lastPage ? lastPage : currentPage;
-
-        setCurrentPage(newPage); // this triggers useEffect fetch
-        setTotalEmployees(newTotal);
+        await refreshEmployees(newPage);
       } else {
         throw new Error(resp.message || "Failed to delete Employee.");
       }
@@ -111,16 +122,7 @@ const EmployeeManagementSystem = () => {
     }
   };
 
-  //refresh employees list
-  const refreshEmployees = async (page = 1) => {
-  setCurrentPage(page);   
-  setLoading(true);
-  try {
-    await fetchEmployees(searchQuery, page);
-  } finally {
-    setLoading(false);
-  }
-};
+  
 
 
   return (
